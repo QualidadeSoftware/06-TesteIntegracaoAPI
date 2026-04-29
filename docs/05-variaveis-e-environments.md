@@ -32,7 +32,7 @@ A regra: **use o escopo mais restrito que resolve o problema.**
 
 | Variable | Type | Initial Value | Current Value |
 |---|---|---|---|
-| `base_url` | default | (deixe em branco) | URL do seu Codespace ou `http://localhost:3000` |
+| `base_url` | default | (deixe em branco, ou use `http://localhost:3000` se for local) | URL do seu Codespace ou `http://localhost:3000` |
 | `resource_id` | default | `1` | `1` |
 
 5. **Save**
@@ -41,11 +41,11 @@ A regra: **use o escopo mais restrito que resolve o problema.**
 > - `Initial Value` é o que vai parar no JSON exportado (e portanto no documento de entrega).
 > - `Current Value` é o que está sendo usado agora — fica só na sua máquina.
 >
-> Para esta atividade, como a URL muda a cada Codespace, **use `Current Value` para `base_url`** e deixe `Initial Value` em branco.
+> Para esta atividade, como a URL muda a cada Codespace, **use `Current Value` para `base_url`** e deixe `Initial Value` em branco. Se você estiver rodando localmente, pode usar `http://localhost:3000` nos dois campos.
 
 ### Importando o exemplo
 
-Há um environment pronto em [`environments/dev.postman_environment.json`](../environments/dev.postman_environment.json) que você pode importar (Environments → Import) e adaptar.
+Há um environment pronto em [`environments/dev.postman_environment.json`](../environments/dev.postman_environment.json) que você pode importar (Environments → Import) e adaptar. Ele vem com `http://localhost:3000` como exemplo; no Codespaces, substitua o `Current Value` de `base_url` pela URL pública da porta `3000`.
 
 ---
 
@@ -68,6 +68,8 @@ Você pode usar variáveis em **qualquer campo de texto**: URL, headers, body, p
   "title": "post de teste"
 }
 ```
+
+Como `userId` é numérico, a variável fica sem aspas. Para valores de texto, use aspas, por exemplo `"title": "{{title}}"`.
 
 ---
 
@@ -92,7 +94,6 @@ pm.test("Status é 201", function () {
 
 const created = pm.response.json();
 pm.environment.set("created_id", created.id);
-console.log("ID criado:", created.id);
 ```
 
 ### URL do próximo request:
@@ -113,6 +114,7 @@ GET {{base_url}}/posts/{{created_id}}
 - Use `Current Value` para a URL do Codespaces (que muda).
 - Adicione `*.secret.json` ao `.gitignore` se houver credenciais.
 - Verifique antes da entrega que **todos** os requests usam `{{base_url}}`.
+- Execute `POST {{base_url}}/reset` antes de repetir a coleção quando ela usar dados fixos como `{{resource_id}} = 1`.
 
 ❌ **Evite**
 

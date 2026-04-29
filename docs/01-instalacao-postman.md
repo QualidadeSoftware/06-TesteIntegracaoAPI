@@ -1,8 +1,8 @@
 # 01 — Instalação do Postman ou Bruno
 
-> Você só precisa de **uma** das duas ferramentas.
+> Para iniciantes, use **Postman**. Bruno também pode ser usado, mas exige adaptar a sintaxe dos testes.
 
-## Opção A — Postman (recomendado para iniciantes)
+## Opção A — Postman (recomendado)
 
 Padrão de mercado, interface polida, documentação extensa.
 
@@ -25,7 +25,7 @@ sudo snap install postman
 
 ---
 
-## Opção B — Bruno (open-source, leve)
+## Opção B — Bruno (open-source, leve, uso avançado)
 
 Bruno armazena coleções como arquivos `.bru` em texto.
 
@@ -48,9 +48,9 @@ winget install Bruno.Bruno
 
 ### ⚠️ Diferenças relevantes
 
-- A sintaxe dos testes do Bruno **não usa** `pm.*` — usa um DSL próprio.
+- A sintaxe dos testes do Bruno **não usa** `pm.*` — usa um DSL próprio. Os exemplos desta atividade estão em Postman.
 - Bruno suporta **importar coleções Postman** (File → Import Collection → Postman).
-- Para a entrega, exporte sua coleção em formato Postman para que o exemplo do repositório seja compatível.
+- Para a entrega, gere evidências equivalentes às do Postman. Se possível, exporte a coleção em formato Postman; se não for possível, anexe os arquivos `.bru` e deixe claro no documento que você usou Bruno.
 
 ---
 

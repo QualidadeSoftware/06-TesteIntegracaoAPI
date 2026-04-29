@@ -2,10 +2,46 @@
 	"info": {
 		"_postman_id": "f1e2d3c4-b5a6-7890-1234-567890abcdef",
 		"name": "EXEMPLO - Atividade Teste API",
-		"description": "Coleção de REFERÊNCIA da atividade de Teste de APIs com Postman.\n\nUNISANTA - Qualidade de Software\nProf. Claudio Nunes\n\nEsta coleção é apenas um EXEMPLO conectado à API didática que sobe via Codespaces (porta 3000). Os 9 requests cobrem GET/POST/PUT/PATCH/DELETE + cenários 404, 400 e 405.\n\nUse este arquivo para conferir como organizar requests, escrever testes em pm.test() e usar variáveis {{base_url}} e {{resource_id}}.\n\nTodos os requests usam o environment `dev` por padrão.",
+		"description": "Coleção de REFERÊNCIA da atividade de Teste de APIs com Postman.\n\nUNISANTA - Qualidade de Software\nProf. Claudio Nunes\n\nEsta coleção é apenas um EXEMPLO conectado à API didática que sobe via Codespaces (porta 3000). Os 9 requests avaliativos cobrem GET/POST/PUT/PATCH/DELETE + cenários 404, 400 e 405. O request 00 - Resetar dados é auxiliar e existe para permitir reexecuções da coleção.\n\nUse este arquivo para conferir como organizar requests, escrever testes em pm.test() e usar variáveis {{base_url}} e {{resource_id}}.\n\nTodos os requests usam o environment `dev` por padrão.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Utilitários",
+			"item": [
+				{
+					"name": "00 - Resetar dados",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status é 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Dados iniciais foram recriados\", function () {",
+									"  const body = pm.response.json();",
+									"  pm.expect(body.status).to.eql(\"reset\");",
+									"  pm.expect(body.total).to.eql(5);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reset",
+							"host": ["{{base_url}}"],
+							"path": ["reset"]
+						}
+					}
+				}
+			]
+		},
 		{
 			"name": "Positivos - Caminho feliz",
 			"item": [
@@ -173,6 +209,12 @@
 									"pm.test(\"Title foi atualizado parcialmente\", function () {",
 									"  const body = pm.response.json();",
 									"  pm.expect(body.title).to.eql(\"patch parcial\");",
+									"});",
+									"",
+									"pm.test(\"Campos não enviados foram preservados\", function () {",
+									"  const body = pm.response.json();",
+									"  pm.expect(body.body).to.eql(\"corpo atualizado\");",
+									"  pm.expect(body.userId).to.eql(1);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -202,8 +244,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status é 200 ou 204\", function () {",
-									"  pm.expect([200, 204]).to.include(pm.response.code);",
+									"pm.test(\"Status é 204 No Content\", function () {",
+									"  pm.response.to.have.status(204);",
 									"});",
 									"",
 									"pm.test(\"Resposta veio em menos de 2s\", function () {",
@@ -312,7 +354,9 @@
 									"",
 									"pm.test(\"Header Allow lista métodos permitidos\", function () {",
 									"  pm.response.to.have.header(\"Allow\");",
-									"  pm.expect(pm.response.headers.get(\"Allow\")).to.include(\"GET\");",
+									"  const allow = pm.response.headers.get(\"Allow\");",
+									"  pm.expect(allow).to.include(\"GET\");",
+									"  pm.expect(allow).to.include(\"POST\");",
 									"});"
 								],
 								"type": "text/javascript"

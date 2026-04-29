@@ -73,7 +73,7 @@ pm.test("Mensagem de erro presente", function () {
 
 ### 3️⃣ Método não permitido → `405 Method Not Allowed`
 
-**O que fazer:** usar um método que a rota não suporta. A rota `/posts` aceita apenas `GET` e `POST` — qualquer outro método retorna `405`.
+**O que fazer:** usar um método que a rota não suporta. A rota `/posts` aceita apenas `GET` e `POST`; nesta API didática, `DELETE`, `PUT` e `PATCH` em `/posts` retornam `405`.
 
 ```http
 DELETE {{base_url}}/posts
@@ -93,6 +93,8 @@ pm.test("Header Allow lista métodos suportados", function () {
   pm.expect(allow).to.include("POST");
 });
 ```
+
+> 💡 Este request não depende do post `id=1`, mas a coleção completa depende. Antes de repetir uma execução com os 9 requests, rode `POST {{base_url}}/reset`.
 
 ---
 

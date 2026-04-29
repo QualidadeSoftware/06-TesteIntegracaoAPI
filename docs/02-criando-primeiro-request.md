@@ -120,11 +120,15 @@ E adicione o header:
 
 Quando todos os 6 requests estiverem prontos:
 
+Se você já tiver rodado a coleção antes, execute `POST BASE/reset` para recriar os dados iniciais.
+
 1. **⋯** da coleção → **Run collection**
 2. Marque todos os requests
 3. Clique em **Run Atividade-Teste-API**
 
 Você verá um relatório com **N tests passed, 0 failed**. **Tire um print desta tela** — ele faz parte dos entregáveis.
+
+> ⚠️ Rode os requests na ordem numérica. Os últimos requests alteram o estado da API, especialmente o `DELETE /posts/1`.
 
 ---
 

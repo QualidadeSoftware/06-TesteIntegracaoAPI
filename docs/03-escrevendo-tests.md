@@ -147,6 +147,7 @@ const id = pm.environment.get("created_id");
 - Nomes de teste descritivos: `"Status é 201 quando criamos um post válido"`
 - Pelo menos um assert de status, um de body e um de tempo em cada request
 - Use `pm.expect([200, 204]).to.include(pm.response.code)` quando aceitar mais de um status
+- Use `POST {{base_url}}/reset` antes de repetir uma coleção que altera dados fixos, como `id=1`
 
 ❌ **Evite**
 
