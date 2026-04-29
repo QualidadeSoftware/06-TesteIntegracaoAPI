@@ -1,0 +1,17 @@
+{
+  "name": "atividade-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API didática para a atividade de Teste de APIs com Postman — UNISANTA / Qualidade de Software",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

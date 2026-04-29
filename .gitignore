@@ -1,10 +1,6 @@
-# Dependências (caso o aluno use Node para Newman)
-node_modules/
-package-lock.json
-
-# Relatórios gerados localmente (mas o report do CI deve ir junto na entrega)
-newman-report-local.html
-*.local.html
+# Dependências da API didática
+api/node_modules/
+api/package-lock.json
 
 # Arquivos de environment com segredos — NUNCA commite
 *.secret.json

@@ -1,21 +1,21 @@
 # 01 — Instalação do Postman ou Bruno
 
-> Você só precisa de **uma** das duas ferramentas. Escolha pelo seu sistema operacional e preferência.
+> Você só precisa de **uma** das duas ferramentas.
 
 ## Opção A — Postman (recomendado para iniciantes)
 
-Postman tem interface mais polida e documentação extensa. Padrão de mercado.
+Padrão de mercado, interface polida, documentação extensa.
 
 ### Download
 
 - **Site oficial:** https://www.postman.com/downloads/
-- Versões disponíveis: Windows, macOS (Intel e Apple Silicon), Linux (`.tar.gz` e Snap)
+- Versões para Windows, macOS (Intel e Apple Silicon) e Linux.
 
 ### Após instalar
 
-1. Abra o Postman
-2. Você pode **pular** a criação de conta clicando em "Skip and go to the app" (canto inferior). Para esta atividade não é necessário sincronizar coleções na nuvem.
-3. Confira a versão em **Help → About** — qualquer versão `10.x` ou superior funciona.
+1. Abra o Postman.
+2. Pode **pular** a criação de conta clicando em "Skip and go to the app". Para esta atividade não é necessário sincronizar coleções na nuvem.
+3. Confira a versão em **Help → About** — qualquer `10.x` ou superior funciona.
 
 ### Linux via Snap
 
@@ -25,9 +25,9 @@ sudo snap install postman
 
 ---
 
-## Opção B — Bruno (open-source, leve, versionável)
+## Opção B — Bruno (open-source, leve)
 
-Bruno armazena coleções como arquivos `.bru` em texto, **diretamente no Git**. Para alguém que vive no terminal e no GitHub, é mais natural.
+Bruno armazena coleções como arquivos `.bru` em texto.
 
 ### Download
 
@@ -48,27 +48,29 @@ winget install Bruno.Bruno
 
 ### ⚠️ Diferenças relevantes
 
-- A sintaxe dos testes **não usa** `pm.*` — usa um DSL próprio do Bruno
-- Bruno suporta **importar coleções Postman** (File → Import Collection → Postman)
-- Para a entrega da atividade, exporte sua coleção em formato Postman para que a rubrica seja aplicada uniformemente
+- A sintaxe dos testes do Bruno **não usa** `pm.*` — usa um DSL próprio.
+- Bruno suporta **importar coleções Postman** (File → Import Collection → Postman).
+- Para a entrega, exporte sua coleção em formato Postman para que o exemplo do repositório seja compatível.
 
 ---
 
 ## Verificando que está funcionando
 
-### Faça um GET de teste
+A API didática que você vai testar sobe via Codespaces (ver [README principal](../README.md)). Para conferir que sua ferramenta funciona, abra a API e faça um GET de teste:
 
-1. Crie uma nova request (botão **+** em qualquer das ferramentas)
-2. Cole a URL: `https://jsonplaceholder.typicode.com/posts/1`
-3. Clique em **Send** (Postman) ou **Run** (Bruno)
+1. Suba a API (Codespaces ou `cd api && npm start` localmente).
+2. No Postman/Bruno crie uma nova request com a URL:
+   - Codespaces: `https://<seu-codespace>-3000.app.github.dev/posts/1`
+   - Local: `http://localhost:3000/posts/1`
+3. Clique em **Send** (Postman) ou **Run** (Bruno).
 4. Você deve ver na resposta um JSON parecido com:
 
 ```json
 {
-  "userId": 1,
   "id": 1,
-  "title": "sunt aut facere repellat provident...",
-  "body": "quia et suscipit\nsuscipit recusandae..."
+  "title": "primeiro post",
+  "body": "conteúdo inicial número 1",
+  "userId": 1
 }
 ```
 
@@ -76,24 +78,4 @@ Se viu este JSON com **status 200**, você está pronto para a Etapa 1. ✅
 
 ---
 
-## (Opcional) Instalar Newman para o bônus
-
-Newman é a CLI do Postman — necessária só para o bônus de CI/CD.
-
-```bash
-# Pré-requisito: Node.js 18+
-node --version
-
-# Instalação
-npm install -g newman
-npm install -g newman-reporter-htmlextra
-
-# Verificação
-newman --version
-```
-
-Se `newman --version` imprimir algo como `6.x.x`, está pronto.
-
----
-
-[← Voltar ao README principal](../README.md)
+[← Voltar ao README principal](../README.md) · [→ Próximo: Criando primeiro request](02-criando-primeiro-request.md)

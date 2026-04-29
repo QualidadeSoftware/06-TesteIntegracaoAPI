@@ -1,0 +1,24 @@
+{
+  "name": "Atividade Postman - UNISANTA",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "API didática",
+      "onAutoForward": "openPreview",
+      "visibility": "public"
+    }
+  },
+  "postCreateCommand": "cd api && npm install",
+  "postAttachCommand": {
+    "server": "cd api && npm start"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Postman.postman-for-vscode"
+      ]
+    }
+  },
+  "remoteUser": "node"
+}

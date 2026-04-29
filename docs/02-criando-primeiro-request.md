@@ -1,6 +1,14 @@
 # 02 — Criando seu primeiro request com testes
 
-Este guia mostra o ciclo completo: **criar coleção → criar request → escrever testes → rodar → ver resultado**. Use a API JSONPlaceholder.
+Este guia mostra o ciclo completo: **subir a API → criar coleção → criar request → escrever testes → rodar → ver resultado**. Use a API didática que vem neste repositório (porta `3000`).
+
+---
+
+## 0. Suba a API antes de tudo
+
+Veja a seção *"Subindo a API no Codespaces"* do [README principal](../README.md). Você precisa ter à mão a URL pública (Codespaces) ou `http://localhost:3000` (local).
+
+Daqui em diante, vamos chamar essa URL de `BASE`.
 
 ---
 
@@ -11,10 +19,8 @@ A coleção é a "pasta" que agrupa seus requests relacionados.
 1. No painel esquerdo, aba **Collections**
 2. Clique em **+** ou **New Collection**
 3. Nomeie como `Atividade-Teste-API`
-4. (Opcional) Adicione uma descrição: "Atividade prática da disciplina Qualidade de Software — UNISANTA"
+4. (Opcional) Adicione uma descrição: "Atividade prática — Qualidade de Software / UNISANTA"
 5. Clique em **Create**
-
-Você verá a coleção vazia no painel esquerdo.
 
 ---
 
@@ -24,15 +30,15 @@ Você verá a coleção vazia no painel esquerdo.
 2. Selecione **Add Request**
 3. Nomeie: `01 - GET listar todos`
 4. No painel central, configure:
-   - **Método:** `GET` (já vem selecionado)
-   - **URL:** `https://jsonplaceholder.typicode.com/posts`
+   - **Método:** `GET`
+   - **URL:** `BASE/posts` (substituindo `BASE` pela sua URL real)
 5. Clique em **Send**
 
 Você verá no painel inferior:
 
 - **Status:** `200 OK` (em verde)
-- **Time:** algo entre 100ms e 1500ms
-- **Body:** um JSON array com 100 posts
+- **Time:** algo entre 5ms e 200ms (API local é rápida)
+- **Body:** um JSON array com os posts iniciais
 
 ---
 
@@ -44,15 +50,13 @@ Você verá no painel inferior:
 2. Escolha a coleção `Atividade-Teste-API`
 3. Confirme em **Save**
 
-Agora o request aparece dentro da coleção no painel esquerdo. ✅
-
 ---
 
 ## 4. Escrever testes na aba `Tests`
 
-Esta é a etapa mais importante. **Sem testes na aba `Tests`, sua entrega não vale.**
+**Sem testes na aba `Tests`, sua entrega não vale.**
 
-1. Com o request aberto, clique na aba **Tests** (entre `Body` e `Settings`)
+1. Com o request aberto, clique na aba **Tests**
 2. Cole o seguinte código:
 
 ```javascript
@@ -78,8 +82,7 @@ pm.test("Resposta veio em menos de 2s", function () {
 ## 5. Rodar o request e ver os testes
 
 1. Clique em **Send** novamente
-2. No painel inferior, clique na aba **Test Results** (ela mostra `(3/3)` se tudo passou)
-3. Você verá:
+2. No painel inferior, clique na aba **Test Results** — deve mostrar `(3/3)`:
 
 ```
 ✓ Status é 200
@@ -87,19 +90,13 @@ pm.test("Resposta veio em menos de 2s", function () {
 ✓ Resposta veio em menos de 2s
 ```
 
-Se algum testar **falhar**, ele aparece em vermelho com a mensagem do erro.
-
 ---
 
 ## 6. Repita para os outros 5 requests positivos
 
-Use o exemplo acima como modelo. Para cada request adicione:
+Use o exemplo acima como modelo. Para cada request adicione **pelo menos 2 testes** na aba `Tests`. Para `POST`, `PUT`, `PATCH`, configure a aba **Body** com `raw` + `JSON`.
 
-- Pelo menos **2 testes** na aba `Tests`
-- Use `pm.test(nomeDescritivo, função)` — o nome aparece no relatório
-- Para `POST`, `PUT`, `PATCH`, lembre de configurar a aba **Body** com `raw` + `JSON`
-
-### Exemplo de body para POST `/posts`
+### Exemplo de body para `POST /posts`
 
 Aba **Body** → **raw** → **JSON**:
 
@@ -111,9 +108,7 @@ Aba **Body** → **raw** → **JSON**:
 }
 ```
 
-E também adicione um header:
-
-Aba **Headers**:
+E adicione o header:
 
 | Key | Value |
 |---|---|
@@ -121,37 +116,36 @@ Aba **Headers**:
 
 ---
 
-## 7. Rodar a coleção inteira de uma vez (Collection Runner)
+## 7. Rodar a coleção inteira (Collection Runner)
 
 Quando todos os 6 requests estiverem prontos:
 
-1. Clique nos **três pontinhos (⋯)** da coleção
-2. Selecione **Run collection**
-3. Marque todos os requests
-4. Clique em **Run Atividade-Teste-API**
+1. **⋯** da coleção → **Run collection**
+2. Marque todos os requests
+3. Clique em **Run Atividade-Teste-API**
 
-Você verá um relatório com **N tests passed, 0 failed**. Esse é o "verde" que a rubrica pede. **Tire um print desta tela** — ela vai para `prints/01-collection-runner-passou.png` no seu fork.
+Você verá um relatório com **N tests passed, 0 failed**. **Tire um print desta tela** — ele faz parte dos entregáveis.
 
 ---
 
 ## Erros comuns
 
 <details>
-<summary><b>Status 200 mas body vazio</b></summary>
+<summary><b>"Could not get response: ECONNREFUSED"</b></summary>
 
-Algumas APIs retornam `200` em vez de `404` para recursos inexistentes. Verifique se você está mandando para a URL certa.
+A API não está rodando. Volte ao terminal do Codespaces (ou local) e confirme que aparece `API didática rodando em http://localhost:3000`.
 </details>
 
 <details>
-<summary><b>"Could not get response: certificate has expired"</b></summary>
+<summary><b>Status 502 ao bater na URL pública do Codespaces</b></summary>
 
-Vá em **Settings → General → SSL certificate verification** e desligue. Em produção isso seria perigoso, mas para uma API pública de aprendizado é seguro.
+Provavelmente o Codespace hibernou. Reabra-o pela aba **Codespaces** no GitHub e aguarde a API iniciar novamente.
 </details>
 
 <details>
 <summary><b>Os testes não aparecem em "Test Results"</b></summary>
 
-Confirme que você colou o código na aba **Tests** (e não em `Pre-request Script`). Os testes só rodam **depois** da resposta chegar.
+Confirme que você colou o código na aba **Tests** (não em `Pre-request Script`). Os testes só rodam **depois** da resposta chegar.
 </details>
 
 ---
