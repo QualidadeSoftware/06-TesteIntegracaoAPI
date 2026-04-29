@@ -1,0 +1,67 @@
+name: Newman API Tests
+
+# Roda a coleção Postman a cada push/PR e publica o relatório como artefato.
+# Atividade da disciplina Qualidade de Software - UNISANTA.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:    # permite rodar manualmente pela aba Actions
+
+jobs:
+  test-api:
+    name: Run Postman Collection via Newman
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Newman + reporter HTML
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
+      - name: Run collection (environment dev)
+        run: |
+          newman run collections/*.postman_collection.json \
+            -e environments/dev.postman_environment.json \
+            -r cli,htmlextra,junit \
+            --reporter-htmlextra-export newman-report-dev.html \
+            --reporter-junit-export newman-report-dev.xml \
+            --color on
+
+      # BÔNUS: descomente esse step se você criou o environment hml
+      # - name: Run collection (environment hml)
+      #   run: |
+      #     newman run collections/*.postman_collection.json \
+      #       -e environments/hml.postman_environment.json \
+      #       -r cli,htmlextra \
+      #       --reporter-htmlextra-export newman-report-hml.html \
+      #       --color on
+
+      - name: Upload HTML report
+        if: always()    # roda mesmo se os testes falharem
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: |
+            newman-report-*.html
+            newman-report-*.xml
+          retention-days: 30
+
+      - name: Publish JUnit summary
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: API Tests
+          path: 'newman-report-*.xml'
+          reporter: java-junit
+          fail-on-error: false

@@ -1,0 +1,31 @@
+# Dependências (caso o aluno use Node para Newman)
+node_modules/
+package-lock.json
+
+# Relatórios gerados localmente (mas o report do CI deve ir junto na entrega)
+newman-report-local.html
+*.local.html
+
+# Arquivos de environment com segredos — NUNCA commite
+*.secret.json
+*secrets*
+
+# Postman: backups locais e logs
+.postman/
+postman.log
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
