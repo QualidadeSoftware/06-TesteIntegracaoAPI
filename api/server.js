@@ -9,6 +9,7 @@
 //   PATCH  /posts/:id        -> 200 (ou 404)
 //   DELETE /posts/:id        -> 204 (ou 404)
 //   DELETE /posts            -> 405 com header Allow
+//   POST   /reset            -> 200 recria dados iniciais
 
 const express = require("express");
 
@@ -62,7 +63,7 @@ seed();
 app.get("/", (_req, res) => {
   res.json({
     name: "API didática — UNISANTA Qualidade de Software",
-    docs: "Use os endpoints /posts (GET, POST), /posts/:id (GET, PUT, PATCH, DELETE) e /health.",
+    docs: "Use os endpoints /posts (GET, POST), /posts/:id (GET, PUT, PATCH, DELETE), /health e /reset (POST auxiliar).",
     total: posts.size
   });
 });

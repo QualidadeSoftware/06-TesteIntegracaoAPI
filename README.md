@@ -1,7 +1,7 @@
 # Atividade Prática — Teste de APIs com Postman
 
-> **Disciplina:** Qualidade de Software · **Instituição:** UNISANTA — Universidade Santa Cecília
-> **Professor:** Claudio Nunes · **Carga prevista:** ~70 minutos em sala + finalização em casa
+> **Disciplina:** Qualidade de Software · 
+> **Professor:** Claudio Nunes · **Duracao prevista:** 70 minutos
 
 Atividade do encontro sobre **Teste de Integração com ênfase em APIs REST**. Você vai criar uma coleção Postman testando uma **API didática que sobe automaticamente em um GitHub Codespace**. Não usamos APIs públicas porque elas podem mudar sem aviso, aplicar limites de uso ou ficar indisponíveis durante a aula. A atividade exercita os três pilares da camada de integração:
 
@@ -81,6 +81,25 @@ Acesse no navegador `https://<seu-codespace>-3000.app.github.dev/health` — voc
 | `GET` | `/health` | 200 — status de saúde |
 | `POST` | `/reset` | 200 — recria os posts iniciais (request auxiliar; não conta nos 9 requests avaliativos) |
 
+### Request auxiliar: reset dos dados
+
+A API guarda os posts em memória. Isso significa que requests como `PUT`, `PATCH` e `DELETE` alteram os dados enquanto a API estiver rodando. Por exemplo: depois que você executa `DELETE /posts/1`, o post `id=1` deixa de existir. Se você rodar a coleção de novo sem resetar, os requests que usam `/posts/1` podem falhar com `404`.
+
+Para voltar ao estado inicial, crie e execute um request auxiliar no Postman:
+
+- **Nome:** `00 - Resetar dados`
+- **Método:** `POST`
+- **URL:** `{{base_url}}/reset`
+- **Body:** vazio
+
+Esse request recria os 5 posts iniciais e responde algo como:
+
+```json
+{ "status": "reset", "total": 5 }
+```
+
+Ele **não conta** nos 9 requests avaliativos da atividade. Use `POST {{base_url}}/reset` antes de rodar a coleção completa novamente, antes dos prints finais ou sempre que algum request com `/posts/1` começar a retornar `404` por causa de uma execução anterior.
+
 Schema do post:
 
 ```json
@@ -108,7 +127,7 @@ Body exigido em `POST` e `PUT`:
 | 5 | `PATCH` | Atualizar parcial | `/posts/1` | Status 200 · campo enviado mudou · campos não enviados foram preservados |
 | 6 | `DELETE` | Remover | `/posts/1` | Status 204 · tempo < 2s |
 
-> ⚠️ **A ordem importa.** Esta API usa dados em memória. Rode os requests na ordem numérica e, antes de rodar a coleção novamente, execute `POST {{base_url}}/reset` para recriar o post `id=1`.
+> ⚠️ **A ordem importa.** Esta API usa dados em memória. Rode os requests na ordem numérica e, antes de rodar a coleção novamente, execute o request auxiliar `POST {{base_url}}/reset` para recriar o post `id=1`.
 
 ### Como criar um request com testes
 
@@ -117,6 +136,50 @@ Body exigido em `POST` e `PUT`:
 3. Aba **Body** (apenas para POST/PUT/PATCH): selecione `raw` + `JSON` e cole o body de exemplo
 4. Aba **Tests** (a mais importante): escreva pelo menos 2 asserts
 5. Clique em **Send** e veja na aba **Test Results** se passaram
+
+### Mini tutorial — escrevendo e executando testes no Postman
+
+No Postman, os testes ficam na aba **Tests** de cada request. Eles rodam **depois** que você clica em **Send** e a API responde. Cada teste é escrito em JavaScript usando `pm.test()`:
+
+```javascript
+pm.test("Descrição do comportamento esperado", function () {
+// asserts aqui dentro
+});
+```
+
+O primeiro texto, entre aspas, é o nome que aparece no relatório. Dentro da função entram as validações. Se uma validação falhar, o teste fica vermelho.
+
+Os comandos mais usados nesta atividade são:
+
+```javascript
+// Validar status HTTP
+pm.response.to.have.status(200);
+
+// Ler o corpo JSON da resposta
+const body = pm.response.json();
+
+// Validar campos do body
+pm.expect(body).to.have.property("id");
+pm.expect(body.id).to.eql(1);
+pm.expect(body.title).to.be.a("string");
+
+// Validar tempo de resposta
+pm.expect(pm.response.responseTime).to.be.below(2000);
+
+// Validar headers
+pm.response.to.have.header("Content-Type");
+```
+
+Para executar e conferir:
+
+1. Abra o request no Postman.
+2. Configure método, URL, headers e body quando necessário.
+3. Cole os testes na aba **Tests**.
+4. Clique em **Send**.
+5. Veja a aba **Test Results** na parte inferior: testes verdes passaram; testes vermelhos falharam.
+6. Depois de testar cada request individualmente, use **Run collection** para executar todos em sequência.
+
+> 💡 Um bom request da atividade deve ter pelo menos um teste de status e outro teste validando body, header ou tempo. Evite testes que sempre passam, como `pm.expect(true).to.be.true`, porque eles não verificam o comportamento real da API.
 
 ### Exemplo da aba Tests para `GET /posts/1`
 
@@ -302,4 +365,4 @@ Material didático sob [MIT License](LICENSE) — sinta-se à vontade para reuti
 
 ---
 
-**Qualidade de Software · UNISANTA**
+**Qualidade de Software**
