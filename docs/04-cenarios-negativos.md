@@ -52,6 +52,8 @@ Content-Type: application/json
 isso não é json válido {{{
 ```
 
+No Postman, configure a aba **Body** como `raw` + `JSON`. O header `Content-Type: application/json` é essencial para a API tentar interpretar o corpo como JSON e retornar `400` quando ele estiver malformado.
+
 ```javascript
 pm.test("Status é 400 Bad Request", function () {
   pm.response.to.have.status(400);
@@ -63,11 +65,9 @@ pm.test("Mensagem de erro presente", function () {
 });
 ```
 
-> 💡 **Variação:** se você mandar um JSON **válido mas com campos faltando** (`{}`), a API responde `422 Unprocessable Entity`. Os dois são códigos legítimos para body errado:
-> - `400` = não consegui sequer parsear sua requisição
-> - `422` = parseei, mas o conteúdo viola as regras de negócio
->
-> Você pode aceitar ambos com `pm.expect([400, 422]).to.include(pm.response.code)`.
+> 💡 **Variação:** se você mandar um JSON **válido mas com campos faltando** (`{}`), a API responde `422 Unprocessable Entity`. Os dois são códigos legítimos para body errado: `400` = não consegui sequer parsear sua requisição; `422` = parseei, mas o conteúdo viola as regras de negócio. Você pode aceitar ambos com `pm.expect([400, 422]).to.include(pm.response.code)`.
+
+Para a atividade avaliativa, use o JSON malformado com `Content-Type: application/json` e valide especificamente `400`.
 
 ---
 
@@ -94,7 +94,7 @@ pm.test("Header Allow lista métodos suportados", function () {
 });
 ```
 
-> 💡 Este request não depende do post `id=1`, mas a coleção completa depende. Antes de repetir uma execução com os 9 requests, rode `POST {{base_url}}/reset`.
+> 💡 Em cenários negativos, o request retorna erro HTTP, mas o teste fica verde porque esse erro é o comportamento esperado. Este request não depende do post `id=1`, mas a coleção completa depende. Antes de repetir uma execução com os 9 requests, rode `POST {{base_url}}/reset`.
 
 ---
 

@@ -1,6 +1,5 @@
 # Dependências da API didática
 api/node_modules/
-api/package-lock.json
 
 # Arquivos de environment com segredos — NUNCA commite
 *.secret.json

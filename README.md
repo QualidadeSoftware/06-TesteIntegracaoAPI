@@ -1,7 +1,7 @@
 # Atividade Prática — Teste de APIs com Postman
 
 > **Disciplina:** Qualidade de Software · 
-> **Professor:** Claudio Nunes · **Duracao prevista:** 70 minutos
+> **Professor:** Claudio Nunes · **Duração prevista:** 70 minutos
 
 Atividade do encontro sobre **Teste de Integração com ênfase em APIs REST**. Você vai criar uma coleção Postman testando uma **API didática que sobe automaticamente em um GitHub Codespace**. Não usamos APIs públicas porque elas podem mudar sem aviso, aplicar limites de uso ou ficar indisponíveis durante a aula. A atividade exercita os três pilares da camada de integração:
 
@@ -16,7 +16,7 @@ Atividade do encontro sobre **Teste de Integração com ênfase em APIs REST**. 
 ## 📋 Pré-requisitos
 
 - [ ] Conta no GitHub (com Codespaces habilitado — qualquer conta gratuita já tem)
-- [ ] [Postman](https://www.postman.com/downloads/) instalado na sua máquina (**recomendado para iniciantes**)
+- [ ] [Postman](https://www.postman.com/downloads/) instalado na sua máquina (**caminho recomendado para iniciantes**)
 - [ ] Opcional: [Bruno](https://www.usebruno.com/downloads), apenas se você souber adaptar os testes, pois Bruno não usa `pm.test()`
 - [ ] Ter visto em aula: pirâmide de testes, conceitos de teste de integração
 
@@ -54,6 +54,17 @@ A API didática que você vai testar está em [`api/`](api/). Ela é uma aplica�
 6. A porta já deve aparecer como `Public`. Se não aparecer, mude a visibilidade da porta para `Public` na aba **Ports** para usar o Postman fora do Codespaces.
 
 > 💡 Se a API não iniciar automaticamente, rode no terminal: `cd api && npm start`.
+> 💡 Se aparecer erro `EADDRINUSE`, a API provavelmente já está rodando na porta `3000`. Confira a aba **Ports** e use a URL encaminhada.
+
+### Se a porta pública não funcionar
+
+Em algumas contas GitHub vinculadas a organizações, políticas de segurança podem impedir portas `Public`. Se isso acontecer, use uma destas alternativas:
+
+- Use a extensão **Postman** dentro do próprio Codespaces/VS Code.
+- Rode a API localmente com `cd api && npm install && npm start` e use `http://localhost:3000`.
+- Peça ao professor orientação para ajustar a visibilidade da porta, se a política da conta permitir.
+
+Para esta atividade, o caminho principal é: **Postman desktop + URL pública da porta 3000**. A extensão Postman no Codespaces é um plano B útil quando o acesso público à porta não estiver disponível.
 
 ### Conferindo que a API está no ar
 
@@ -100,6 +111,8 @@ Esse request recria os 5 posts iniciais e responde algo como:
 
 Ele **não conta** nos 9 requests avaliativos da atividade. Use `POST {{base_url}}/reset` antes de rodar a coleção completa novamente, antes dos prints finais ou sempre que algum request com `/posts/1` começar a retornar `404` por causa de uma execução anterior.
 
+> ✅ Ritual recomendado antes dos prints finais: execute `00 - Resetar dados` uma vez e, em seguida, rode os 9 requests avaliativos na ordem numérica. No Runner, o reset pode ficar marcado para preparar os dados, mas continua fora da contagem de requests avaliativos.
+
 Schema do post:
 
 ```json
@@ -110,6 +123,36 @@ Body exigido em `POST` e `PUT`:
 
 ```json
 { "title": "obrigatório", "body": "obrigatório", "userId": 1 }
+```
+
+Bodies sugeridos para os requests positivos:
+
+**POST `/posts`**
+
+```json
+{
+   "title": "teste UNISANTA",
+   "body": "corpo do post de teste",
+   "userId": 1
+}
+```
+
+**PUT `/posts/{{resource_id}}`**
+
+```json
+{
+   "title": "título atualizado",
+   "body": "corpo atualizado",
+   "userId": 1
+}
+```
+
+**PATCH `/posts/{{resource_id}}`**
+
+```json
+{
+   "title": "patch parcial"
+}
 ```
 
 ---
@@ -143,7 +186,7 @@ No Postman, os testes ficam na aba **Tests** de cada request. Eles rodam **depoi
 
 ```javascript
 pm.test("Descrição do comportamento esperado", function () {
-// asserts aqui dentro
+   // asserts aqui dentro
 });
 ```
 
@@ -220,12 +263,28 @@ pm.test("Status é 405 Method Not Allowed", function () {
 });
 
 pm.test("Header Allow lista métodos permitidos", function () {
-pm.response.to.have.header("Allow");
-const allow = pm.response.headers.get("Allow");
-pm.expect(allow).to.include("GET");
-pm.expect(allow).to.include("POST");
+   pm.response.to.have.header("Allow");
+   const allow = pm.response.headers.get("Allow");
+   pm.expect(allow).to.include("GET");
+   pm.expect(allow).to.include("POST");
 });
 ```
+
+### Configuração exata para o cenário 400
+
+Para o request `08 - POST body inválido (400)`, configure assim:
+
+| Campo | Valor |
+|---|---|
+| Método | `POST` |
+| URL | `{{base_url}}/posts` |
+| Header | `Content-Type: application/json` |
+| Body | `raw` + `JSON` |
+| Conteúdo do body | `isso não é json válido {{{` |
+
+Se o header `Content-Type: application/json` não estiver presente, o Postman/API pode tratar o corpo de outro jeito e o status esperado pode deixar de ser `400`.
+
+> 💡 O request retorna um erro HTTP, mas o teste fica verde porque esse erro era exatamente o comportamento esperado.
 
 ✅ **Ao final da Etapa 2:** 9 requests avaliativos no total (6 positivos + 3 negativos), todos com testes que **passam** validando o comportamento esperado (mesmo que o comportamento seja “retornar erro”). O request `POST /reset`, se você criar, é auxiliar e fica fora dessa contagem.
 
@@ -256,6 +315,8 @@ Quando o Codespace cair e for recriado, **a URL muda**. Você não vai querer ed
 
    O arquivo [`environments/dev.postman_environment.json`](environments/dev.postman_environment.json) vem com `http://localhost:3000` como exemplo. Se estiver no Codespaces, importe o arquivo e troque o `Current Value` de `base_url` pela URL pública da porta `3000`.
 
+   A URL pública do Codespaces deve ficar no **Current Value**. No JSON exportado, tudo bem o `Initial Value` aparecer vazio ou como `http://localhost:3000`.
+
 2. **Trocar URLs por variáveis:**
 
    | Antes | Depois |
@@ -267,6 +328,17 @@ Quando o Codespace cair e for recriado, **a URL muda**. Você não vai querer ed
 4. **Exportar coleção e environment** como `.json` (você usará nos entregáveis).
 
 ✅ **Ao final da Etapa 3:** coleção e environment exportados, rodando 100% verde com o environment ativo.
+
+### Obrigatório x desafio extra
+
+Para a entrega mínima, faça:
+
+- 9 requests avaliativos, sendo 6 positivos e 3 negativos.
+- Pelo menos 2 asserts em cada request.
+- Todos os requests usando `{{base_url}}`.
+- Environment `dev` ativo no momento da execução.
+
+Como desafio extra, você pode tornar a coleção menos dependente do `resource_id = 1`: no teste do `POST /posts`, salve o `id` criado com `pm.environment.set("created_id", body.id)` e use `{{created_id}}` em requests seguintes. Esse padrão é mais robusto, mas não é obrigatório para concluir a atividade.
 
 ---
 
@@ -287,6 +359,7 @@ Quando o Codespace cair e for recriado, **a URL muda**. Você não vai querer ed
    - Mostrar os 3 cenários negativos passando
 5. **Print de pelo menos um request usando variáveis**
    - URL do request mostrando `{{base_url}}/posts/{{resource_id}}` na barra
+   - O dropdown de environment deve mostrar `dev` ativo
 6. **Conteúdo da coleção exportada (`.json`)**
    - Cole o JSON dentro do documento (em bloco de código)
    - **OU** anexe o arquivo `.json` junto ao documento
@@ -306,6 +379,26 @@ Quando o Codespace cair e for recriado, **a URL muda**. Você não vai querer ed
 - [ ] A coleção roda 100% verde com o environment `dev` ativo
 - [ ] O documento contém todos os prints e os JSONs exigidos
 - [ ] Identifiquei nome, RA e turma na primeira página
+
+### Prints: o que precisa aparecer
+
+Nos prints, garanta que a informação importante esteja visível:
+
+- API rodando: terminal com `API didática rodando em http://localhost:3000` e aba **Ports** com a porta `3000`.
+- Etapa 1: Collection Runner mostrando os 6 requests positivos, total de testes e `0 failed`.
+- Etapa 2: Collection Runner mostrando os 9 requests avaliativos, incluindo `404`, `400` e `405`, com `0 failed`.
+- Variáveis: barra da URL com `{{base_url}}` e dropdown do environment `dev` ativo.
+
+### Diagnóstico rápido
+
+| Sintoma | Causa provável | Como resolver |
+|---|---|---|
+| `Invalid URL` | Environment `dev` não está ativo ou `base_url` está vazio | Selecione o environment `dev` e confira o `Current Value` de `base_url` |
+| `404` em `/posts/1` | O post `id=1` foi removido em execução anterior | Rode `POST {{base_url}}/reset` e execute a coleção de novo na ordem |
+| Esperava `400`, mas veio `422` | Body inválido não foi enviado como JSON malformado | Confira `Content-Type: application/json` e Body `raw` + `JSON` |
+| `ECONNREFUSED` | API não está rodando | Inicie com `cd api && npm start` ou reabra o Codespace |
+| `502` na URL do Codespaces | Codespace hibernou ou API não iniciou | Reabra o Codespace e aguarde a porta `3000` aparecer |
+| `EADDRINUSE` no terminal | Já existe uma API usando a porta `3000` | Use a URL da aba **Ports** ou pare o processo antigo |
 
 ---
 
@@ -336,7 +429,7 @@ Quando o Codespace cair e for recriado, **a URL muda**. Você não vai querer ed
 
 Sim. Bruno é open-source e armazena coleções como arquivos `.bru` versionáveis no Git. A sintaxe dos testes é diferente (não usa `pm.*`), mas os conceitos são os mesmos. Para a entrega, gere evidências equivalentes; se possível, exporte a coleção em formato Postman, ou anexe os arquivos `.bru` junto ao documento.
 
-Para esta atividade, **Postman é o caminho recomendado** porque todos os exemplos e asserts usam `pm.test()`. Use Bruno apenas se você se sentir confortável para adaptar a sintaxe dos testes e entregar evidências equivalentes.
+Para esta atividade, **Postman é o caminho recomendado** porque todos os exemplos, prints esperados e asserts usam `pm.test()`. O suporte em aula seguirá os exemplos em Postman. Use Bruno apenas se você se sentir confortável para adaptar a sintaxe dos testes e entregar evidências equivalentes.
 </details>
 
 <details>

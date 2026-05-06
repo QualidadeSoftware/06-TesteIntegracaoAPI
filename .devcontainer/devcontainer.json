@@ -11,7 +11,7 @@
   },
   "postCreateCommand": "cd api && npm install",
   "postAttachCommand": {
-    "server": "cd api && npm start"
+    "server": "cd api && if node -e \"const net=require('net');const port=Number(process.env.PORT)||3000;const server=net.createServer();server.once('error',()=>process.exit(1));server.once('listening',()=>server.close(()=>process.exit(0)));server.listen(port);\"; then npm start; else echo 'API já parece estar rodando na porta 3000. Use a aba Ports.'; fi"
   },
   "customizations": {
     "vscode": {

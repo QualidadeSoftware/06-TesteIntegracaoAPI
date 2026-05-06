@@ -8,6 +8,8 @@ Este guia mostra o ciclo completo: **subir a API → criar coleção → criar r
 
 Veja a seção *"Subindo a API no Codespaces"* do [README principal](../README.md). Você precisa ter à mão a URL pública (Codespaces) ou `http://localhost:3000` (local).
 
+Se a porta pública do Codespaces estiver bloqueada pela sua conta/organização, use a extensão Postman dentro do Codespaces ou rode a API localmente.
+
 Daqui em diante, vamos chamar essa URL de `BASE`.
 
 ---
@@ -75,7 +77,7 @@ pm.test("Resposta veio em menos de 2s", function () {
 });
 ```
 
-3. **Ctrl+S** para salvar
+1. **Ctrl+S** para salvar
 
 ---
 
@@ -84,7 +86,7 @@ pm.test("Resposta veio em menos de 2s", function () {
 1. Clique em **Send** novamente
 2. No painel inferior, clique na aba **Test Results** — deve mostrar `(3/3)`:
 
-```
+```text
 ✓ Status é 200
 ✓ Body é um array com mais de 0 itens
 ✓ Resposta veio em menos de 2s
@@ -110,9 +112,29 @@ Aba **Body** → **raw** → **JSON**:
 
 E adicione o header:
 
-| Key | Value |
-|---|---|
+| Key            | Value              |
+| -------------- | ------------------ |
 | `Content-Type` | `application/json` |
+
+### Exemplos de body para `PUT` e `PATCH`
+
+`PUT BASE/posts/1` substitui o recurso inteiro:
+
+```json
+{
+  "title": "título atualizado",
+  "body": "corpo atualizado",
+  "userId": 1
+}
+```
+
+`PATCH BASE/posts/1` altera só os campos enviados:
+
+```json
+{
+  "title": "patch parcial"
+}
+```
 
 ---
 
@@ -121,6 +143,8 @@ E adicione o header:
 Quando todos os 6 requests estiverem prontos:
 
 Se você já tiver rodado a coleção antes, execute `POST BASE/reset` para recriar os dados iniciais.
+
+Ritual recomendado antes de tirar prints: rode `POST BASE/reset` uma vez, depois execute os requests na ordem numérica.
 
 1. **⋯** da coleção → **Run collection**
 2. Marque todos os requests
@@ -134,23 +158,21 @@ Você verá um relatório com **N tests passed, 0 failed**. **Tire um print dest
 
 ## Erros comuns
 
-<details>
-<summary><b>"Could not get response: ECONNREFUSED"</b></summary>
+### "Could not get response: ECONNREFUSED"
 
 A API não está rodando. Volte ao terminal do Codespaces (ou local) e confirme que aparece `API didática rodando em http://localhost:3000`.
-</details>
 
-<details>
-<summary><b>Status 502 ao bater na URL pública do Codespaces</b></summary>
+### Status 502 ao bater na URL pública do Codespaces
 
 Provavelmente o Codespace hibernou. Reabra-o pela aba **Codespaces** no GitHub e aguarde a API iniciar novamente.
-</details>
 
-<details>
-<summary><b>Os testes não aparecem em "Test Results"</b></summary>
+### Erro EADDRINUSE no terminal
+
+Esse erro normalmente significa que a API já está rodando na porta `3000`. Confira a aba **Ports** e use a URL encaminhada. Se precisar reiniciar do zero, pare o processo antigo no terminal antes de rodar `npm start` novamente.
+
+### Os testes não aparecem em "Test Results"
 
 Confirme que você colou o código na aba **Tests** (não em `Pre-request Script`). Os testes só rodam **depois** da resposta chegar.
-</details>
 
 ---
 

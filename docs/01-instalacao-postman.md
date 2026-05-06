@@ -6,9 +6,11 @@
 
 Padrão de mercado, interface polida, documentação extensa.
 
-### Download
+Nesta atividade, o caminho recomendado é usar o **Postman desktop** com a URL pública da porta `3000` do Codespaces. Se a sua conta GitHub não permitir porta pública, use a extensão Postman dentro do próprio Codespaces/VS Code ou rode a API localmente.
 
-- **Site oficial:** https://www.postman.com/downloads/
+### Download do Postman
+
+- **Site oficial:** <https://www.postman.com/downloads/>
 - Versões para Windows, macOS (Intel e Apple Silicon) e Linux.
 
 ### Após instalar
@@ -29,10 +31,10 @@ sudo snap install postman
 
 Bruno armazena coleções como arquivos `.bru` em texto.
 
-### Download
+### Download do Bruno
 
-- **Site oficial:** https://www.usebruno.com/downloads
-- **GitHub:** https://github.com/usebruno/bruno
+- **Site oficial:** <https://www.usebruno.com/downloads>
+- **GitHub:** <https://github.com/usebruno/bruno>
 
 ### macOS via Homebrew
 
@@ -51,6 +53,7 @@ winget install Bruno.Bruno
 - A sintaxe dos testes do Bruno **não usa** `pm.*` — usa um DSL próprio. Os exemplos desta atividade estão em Postman.
 - Bruno suporta **importar coleções Postman** (File → Import Collection → Postman).
 - Para a entrega, gere evidências equivalentes às do Postman. Se possível, exporte a coleção em formato Postman; se não for possível, anexe os arquivos `.bru` e deixe claro no documento que você usou Bruno.
+- O suporte principal em aula seguirá os exemplos em Postman. Use Bruno apenas se você já se sentir confortável para adaptar os testes.
 
 ---
 
@@ -75,6 +78,15 @@ A API didática que você vai testar sobe via Codespaces (ver [README principal]
 ```
 
 Se viu este JSON com **status 200**, você está pronto para a Etapa 1. ✅
+
+## Problemas comuns de conexão
+
+| Sintoma                              | Causa provável                         | Como resolver                                                   |
+| ------------------------------------ | -------------------------------------- | --------------------------------------------------------------- |
+| `ECONNREFUSED`                       | A API não está rodando                 | Inicie com `cd api && npm start`                                |
+| `502` na URL pública                 | Codespace hibernado ou API não iniciou | Reabra o Codespace e confira a aba **Ports**                    |
+| Não consigo deixar a porta `Public`  | Restrição da conta/organização GitHub  | Use a extensão Postman no Codespaces ou rode localmente         |
+| `EADDRINUSE` no terminal             | A API já está rodando na porta `3000`  | Use a URL encaminhada na aba **Ports**                          |
 
 ---
 
