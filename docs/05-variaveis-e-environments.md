@@ -23,8 +23,8 @@ A regra: **use o escopo mais restrito que resolve o problema.**
 
 ### Pelo Postman
 
-1. Canto superior direito: ícone de **engrenagem (⚙️)**
-2. **Environments → Add**
+1. No painel esquerdo, abra **Environments**.
+2. Clique em **+** ou **Create Environment**.
 3. Nome: `dev`
 4. Adicione duas variáveis:
 
@@ -37,17 +37,17 @@ A regra: **use o escopo mais restrito que resolve o problema.**
   - Initial Value: `1`
   - Current Value: `1`
 
-1. **Save**
+1. Clique em **Save**.
 
 > ⚠️ **`Initial Value` vs `Current Value`:**
-> `Initial Value` é o que vai parar no JSON exportado (e portanto no documento de entrega). `Current Value` é o que está sendo usado agora e fica só na sua máquina.
+> `Initial Value` é o valor que aparece no JSON exportado. `Current Value` é o valor usado na execução.
 > Para esta atividade, como a URL muda a cada Codespace, **use `Current Value` para `base_url`** e deixe `Initial Value` em branco. Se você estiver rodando localmente, pode usar `http://localhost:3000` nos dois campos.
 
 ### Importando o exemplo
 
-Há um environment pronto em [`environments/dev.postman_environment.json`](../environments/dev.postman_environment.json) que você pode importar (Environments → Import) e adaptar. Ele vem com `http://localhost:3000` como exemplo; no Codespaces, substitua o `Current Value` de `base_url` pela URL pública da porta `3000`.
+Há um environment pronto em [`environments/dev.postman_environment.json`](../environments/dev.postman_environment.json) que você pode importar e adaptar. Clique em **Import**, selecione o arquivo `.json`, abra o environment `dev` importado e substitua o `Current Value` de `base_url` pela URL pública da porta `3000`.
 
-Se você estiver usando Codespaces, a URL pública deve ficar no **Current Value**. No JSON exportado, é aceitável que o `Initial Value` de `base_url` fique vazio ou com `http://localhost:3000`.
+Depois de alterar o `Current Value`, clique em **Save** no environment. Se você estiver usando Codespaces, a URL pública deve ficar no **Current Value**. No JSON exportado, é aceitável que o `Initial Value` de `base_url` fique vazio ou com `http://localhost:3000`.
 
 ---
 
@@ -79,7 +79,7 @@ Como `userId` é numérico, a variável fica sem aspas. Para valores de texto, u
 
 Antes de rodar a coleção, **selecione o environment `dev`** no dropdown ao lado do ícone de olho (canto superior direito).
 
-Se não houver environment ativo, `{{base_url}}` aparece em vermelho e o request falha com erro `Invalid URL`.
+Na interface atual, esse dropdown pode aparecer como **No environment**. Troque **No environment** por `dev`. Se não houver environment ativo, `{{base_url}}` aparece em vermelho e o request falha com erro `Invalid URL`.
 
 ---
 
@@ -87,7 +87,7 @@ Se não houver environment ativo, `{{base_url}}` aparece em vermelho e o request
 
 Caso de uso clássico: você cria um recurso com `POST`, recebe o id de volta, e quer usar esse id no próximo request.
 
-### Aba Tests do `POST /posts`
+### Scripts → Post-response do `POST /posts`
 
 ```javascript
 pm.test("Status é 201", function () {

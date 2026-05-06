@@ -16,8 +16,9 @@ Nesta atividade, o caminho recomendado é usar o **Postman desktop** com a URL p
 ### Após instalar
 
 1. Abra o Postman.
-2. Pode **pular** a criação de conta clicando em "Skip and go to the app". Para esta atividade não é necessário sincronizar coleções na nuvem.
-3. Confira a versão em **Help → About** — qualquer `10.x` ou superior funciona.
+2. Se o Postman pedir login, você pode entrar com uma conta gratuita. Se aparecer uma opção para pular o login, ela também serve para esta atividade.
+3. Use um workspace pessoal/local. O nome do workspace no topo pode ser diferente para cada aluno; não é necessário criar workspace específico nem usar plano pago.
+4. Confira a versão em **Help → About** — qualquer `10.x` ou superior funciona, mas os prints do roteiro consideram a interface atual com **Scripts → Post-response**.
 
 ### Linux via Snap
 
@@ -54,6 +55,8 @@ winget install Bruno.Bruno
 - Bruno suporta **importar coleções Postman** (File → Import Collection → Postman).
 - Para a entrega, gere evidências equivalentes às do Postman. Se possível, exporte a coleção em formato Postman; se não for possível, anexe os arquivos `.bru` e deixe claro no documento que você usou Bruno.
 - O suporte principal em aula seguirá os exemplos em Postman. Use Bruno apenas se você já se sentir confortável para adaptar os testes.
+
+Se estiver usando a extensão Postman no VS Code, os nomes e posições podem variar um pouco em relação ao Postman desktop. Siga o conceito equivalente: request, body, script de pós-resposta e resultados dos testes.
 
 ---
 

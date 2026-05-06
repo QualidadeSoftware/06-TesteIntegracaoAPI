@@ -157,6 +157,23 @@ Bodies sugeridos para os requests positivos:
 
 ---
 
+## 🧭 Onde fica cada coisa no Postman atual
+
+Na versão atual do Postman para Windows, alguns nomes mudaram em relação a tutoriais antigos. Use este mapa rápido:
+
+- **Collections:** painel esquerdo, onde ficam suas coleções e requests.
+- **Método, URL e Send:** faixa superior do request aberto.
+- **Params, Authorization, Headers, Body, Scripts e Settings:** abas do request.
+- **Scripts → Post-response:** local correto para escrever testes com `pm.test()`.
+- **Pre-request:** script que roda antes da chamada; não cole os asserts aqui.
+- **Test Results:** aba inferior que aparece depois do **Send** e mostra se os testes passaram.
+- **No environment / dev:** dropdown no canto superior direito para selecionar o environment.
+- **Save:** botão no topo direito do request. Use após alterar URL, Body, Headers ou Scripts.
+
+> 💡 Quando o request tem script salvo, o Postman pode mostrar um ponto/indicador na aba **Scripts**.
+
+---
+
 ## 🛠 Etapa 1 — Coleção básica · 30 min
 
 **Objetivo:** criar 6 requests cobrindo todas as operações CRUD com testes automatizados em cada um.
@@ -174,15 +191,17 @@ Bodies sugeridos para os requests positivos:
 
 ### Como criar um request com testes
 
-1. No Postman: **Collections → New Collection** → nomeie `Atividade-Teste-API`
-2. **Add Request** → escolha o método e cole a URL completa
-3. Aba **Body** (apenas para POST/PUT/PATCH): selecione `raw` + `JSON` e cole o body de exemplo
-4. Aba **Tests** (a mais importante): escreva pelo menos 2 asserts
-5. Clique em **Send** e veja na aba **Test Results** se passaram
+1. No painel esquerdo, em **Collections**, clique em **+** ou **New Collection** e nomeie `Atividade-Teste-API`. Se o Postman oferecer modelos/templates, escolha uma coleção em branco.
+2. Para criar um request, clique nos três pontos da coleção e escolha **Add request**, ou use o botão **+** no topo e depois salve o request dentro da coleção.
+3. Escolha o método e cole a URL completa. No começo, pode usar a URL pública inteira do Codespaces; na Etapa 3 você trocará por `{{base_url}}`.
+4. Aba **Body**: aparece em todos os requests, mas nesta atividade você só deve preenchê-la em `POST`, `PUT`, `PATCH` e no cenário `POST` inválido. Selecione **raw** e, no dropdown de formato ao lado, escolha **JSON**.
+5. Aba **Scripts → Post-response**: escreva pelo menos 2 asserts com `pm.test()`.
+6. Clique em **Save** no topo direito do request ou pressione **Ctrl+S**.
+7. Clique em **Send** e veja na aba inferior **Test Results** se passaram.
 
 ### Mini tutorial — escrevendo e executando testes no Postman
 
-No Postman, os testes ficam na aba **Tests** de cada request. Eles rodam **depois** que você clica em **Send** e a API responde. Cada teste é escrito em JavaScript usando `pm.test()`:
+No Postman atual, os testes ficam em **Scripts → Post-response**. Eles rodam **depois** que você clica em **Send** e a API responde. Cada teste é escrito em JavaScript usando `pm.test()`:
 
 ```javascript
 pm.test("Descrição do comportamento esperado", function () {
@@ -217,14 +236,16 @@ Para executar e conferir:
 
 1. Abra o request no Postman.
 2. Configure método, URL, headers e body quando necessário.
-3. Cole os testes na aba **Tests**.
+3. Cole os testes em **Scripts → Post-response**.
 4. Clique em **Send**.
 5. Veja a aba **Test Results** na parte inferior: testes verdes passaram; testes vermelhos falharam.
 6. Depois de testar cada request individualmente, use **Run collection** para executar todos em sequência.
 
+> ⚠️ Não cole os asserts em **Pre-request**. Essa área roda antes da chamada e ainda não tem acesso à resposta da API.
+
 > 💡 Um bom request da atividade deve ter pelo menos um teste de status e outro teste validando body, header ou tempo. Evite testes que sempre passam, como `pm.expect(true).to.be.true`, porque eles não verificam o comportamento real da API.
 
-### Exemplo da aba Tests para `GET /posts/1`
+### Exemplo de Scripts → Post-response para `GET /posts/1`
 
 ```javascript
 pm.test("Status é 200", function () {
@@ -281,8 +302,9 @@ Para o request `08 - POST body inválido (400)`, configure assim:
 | Header | `Content-Type: application/json` |
 | Body | `raw` + `JSON` |
 | Conteúdo do body | `isso não é json válido {{{` |
+| Scripts | **Post-response** com os asserts `pm.test()` |
 
-Se o header `Content-Type: application/json` não estiver presente, o Postman/API pode tratar o corpo de outro jeito e o status esperado pode deixar de ser `400`.
+Se o header `Content-Type: application/json` não estiver presente, o Postman/API pode tratar o corpo de outro jeito e o status esperado pode deixar de ser `400`. Na interface atual, a aba pode aparecer como **Headers 8**, **Headers 9** etc.; esse número é apenas a quantidade de headers configurados automaticamente ou manualmente.
 
 > 💡 O request retorna um erro HTTP, mas o teste fica verde porque esse erro era exatamente o comportamento esperado.
 
@@ -306,16 +328,23 @@ Quando o Codespace cair e for recriado, **a URL muda**. Você não vai querer ed
 
 ### Passo a passo
 
-1. **Criar um Environment** (Postman → engrenagem → Environments → Add → nome `dev`):
+1. **Criar um Environment**:
+
+   - No painel esquerdo, abra **Environments**.
+   - Clique em **+** ou **Create Environment**.
+   - Nomeie como `dev`.
+   - Adicione as variáveis abaixo.
 
    | Variável | Initial Value | Current Value |
    |---|---|---|
    | `base_url` | deixe em branco, ou use `http://localhost:3000` se for local | URL do seu Codespace ou `http://localhost:3000` |
    | `resource_id` | `1` | `1` |
 
-   O arquivo [`environments/dev.postman_environment.json`](environments/dev.postman_environment.json) vem com `http://localhost:3000` como exemplo. Se estiver no Codespaces, importe o arquivo e troque o `Current Value` de `base_url` pela URL pública da porta `3000`.
+   Depois de alterar o `Current Value`, clique em **Save** no environment.
 
-   A URL pública do Codespaces deve ficar no **Current Value**. No JSON exportado, tudo bem o `Initial Value` aparecer vazio ou como `http://localhost:3000`.
+   O arquivo [`environments/dev.postman_environment.json`](environments/dev.postman_environment.json) vem com `http://localhost:3000` como exemplo. Para importar o exemplo: clique em **Import**, selecione esse arquivo `.json`, abra o environment `dev` importado e troque o `Current Value` de `base_url` pela URL pública da porta `3000`.
+
+   A URL pública do Codespaces deve ficar no **Current Value**, que é o valor usado na execução. No JSON exportado, tudo bem o `Initial Value` aparecer vazio ou como `http://localhost:3000`.
 
 2. **Trocar URLs por variáveis:**
 
@@ -324,8 +353,13 @@ Quando o Codespace cair e for recriado, **a URL muda**. Você não vai querer ed
    | `https://...3000.app.github.dev/posts/1` | `{{base_url}}/posts/{{resource_id}}` |
    | `https://...3000.app.github.dev/posts` | `{{base_url}}/posts` |
 
-3. **Ativar o environment `dev`** no dropdown e rodar a coleção inteira (**Run collection**). Se você já tiver rodado a coleção antes, execute `POST {{base_url}}/reset` primeiro.
-4. **Exportar coleção e environment** como `.json` (você usará nos entregáveis).
+3. **Ativar o environment `dev`**: no canto superior direito, onde aparece **No environment**, selecione `dev`. Se continuar aparecendo **No environment**, `{{base_url}}` não será resolvido.
+4. **Rodar a coleção inteira**: no painel esquerdo, passe o mouse sobre a coleção, clique nos três pontos e escolha **Run collection**. Na tela do Runner, confira se os requests estão marcados e clique em **Run**.
+5. Antes de clicar em **Run**, confira se a ordem está `00 - Resetar dados`, `01`, `02`, ..., `09`. Se o Runner mostrar pastas, expanda e confirme a sequência.
+6. **Exportar coleção e environment** como `.json`:
+   - Collection: painel esquerdo → três pontos da coleção → **Export** → formato Collection v2.1.
+   - Environment: painel esquerdo → **Environments** → três pontos em `dev` → **Export**.
+   - Se a opção não aparecer, clique com o botão direito no item ou abra o item e procure o menu de mais opções.
 
 ✅ **Ao final da Etapa 3:** coleção e environment exportados, rodando 100% verde com o environment ativo.
 
@@ -338,7 +372,7 @@ Para a entrega mínima, faça:
 - Todos os requests usando `{{base_url}}`.
 - Environment `dev` ativo no momento da execução.
 
-Como desafio extra, você pode tornar a coleção menos dependente do `resource_id = 1`: no teste do `POST /posts`, salve o `id` criado com `pm.environment.set("created_id", body.id)` e use `{{created_id}}` em requests seguintes. Esse padrão é mais robusto, mas não é obrigatório para concluir a atividade.
+Como desafio extra, você pode tornar a coleção menos dependente do `resource_id = 1`: em **Scripts → Post-response** do `POST /posts`, salve o `id` criado com `pm.environment.set("created_id", body.id)` e use `{{created_id}}` em requests seguintes. Esse padrão é mais robusto, mas não é obrigatório para concluir a atividade.
 
 ---
 
@@ -360,6 +394,8 @@ Como desafio extra, você pode tornar a coleção menos dependente do `resource_
 5. **Print de pelo menos um request usando variáveis**
    - URL do request mostrando `{{base_url}}/posts/{{resource_id}}` na barra
    - O dropdown de environment deve mostrar `dev` ativo
+   - A aba **Scripts** deve estar selecionada, com **Post-response** ativo e os testes `pm.test()` visíveis
+   - A aba inferior **Test Results** deve mostrar os testes passando após o **Send**
 6. **Conteúdo da coleção exportada (`.json`)**
    - Cole o JSON dentro do documento (em bloco de código)
    - **OU** anexe o arquivo `.json` junto ao documento
@@ -372,7 +408,7 @@ Como desafio extra, você pode tornar a coleção menos dependente do `resource_
 ### Checklist rápido antes de enviar
 
 - [ ] Tenho 9 requests avaliativos (6 positivos + 3 negativos); requests auxiliares como `/reset` ficam fora da contagem
-- [ ] Cada request tem **no mínimo 2 asserts** na aba `Tests`
+- [ ] Cada request tem **no mínimo 2 asserts** em **Scripts → Post-response**
 - [ ] Os 3 cenários negativos validam status `404`, `400` e `405` (sem usar `5xx`)
 - [ ] Todos os 9 requests usam `{{base_url}}` (nada hardcoded)
 - [ ] Antes de reexecutar a coleção, rodei `POST /reset` para recriar os dados iniciais
@@ -387,7 +423,7 @@ Nos prints, garanta que a informação importante esteja visível:
 - API rodando: terminal com `API didática rodando em http://localhost:3000` e aba **Ports** com a porta `3000`.
 - Etapa 1: Collection Runner mostrando os 6 requests positivos, total de testes e `0 failed`.
 - Etapa 2: Collection Runner mostrando os 9 requests avaliativos, incluindo `404`, `400` e `405`, com `0 failed`.
-- Variáveis: barra da URL com `{{base_url}}` e dropdown do environment `dev` ativo.
+- Variáveis: barra da URL com `{{base_url}}`, dropdown do environment `dev` ativo, **Scripts → Post-response** visível e **Test Results** com testes passando.
 
 ### Diagnóstico rápido
 
@@ -396,6 +432,7 @@ Nos prints, garanta que a informação importante esteja visível:
 | `Invalid URL` | Environment `dev` não está ativo ou `base_url` está vazio | Selecione o environment `dev` e confira o `Current Value` de `base_url` |
 | `404` em `/posts/1` | O post `id=1` foi removido em execução anterior | Rode `POST {{base_url}}/reset` e execute a coleção de novo na ordem |
 | Esperava `400`, mas veio `422` | Body inválido não foi enviado como JSON malformado | Confira `Content-Type: application/json` e Body `raw` + `JSON` |
+| Testes não aparecem em `Test Results` | Código foi colado no lugar errado | Cole os asserts em **Scripts → Post-response**, não em **Pre-request** |
 | `ECONNREFUSED` | API não está rodando | Inicie com `cd api && npm start` ou reabra o Codespace |
 | `502` na URL do Codespaces | Codespace hibernou ou API não iniciou | Reabra o Codespace e aguarde a porta `3000` aparecer |
 | `EADDRINUSE` no terminal | Já existe uma API usando a porta `3000` | Use a URL da aba **Ports** ou pare o processo antigo |
@@ -430,6 +467,8 @@ Nos prints, garanta que a informação importante esteja visível:
 Sim. Bruno é open-source e armazena coleções como arquivos `.bru` versionáveis no Git. A sintaxe dos testes é diferente (não usa `pm.*`), mas os conceitos são os mesmos. Para a entrega, gere evidências equivalentes; se possível, exporte a coleção em formato Postman, ou anexe os arquivos `.bru` junto ao documento.
 
 Para esta atividade, **Postman é o caminho recomendado** porque todos os exemplos, prints esperados e asserts usam `pm.test()`. O suporte em aula seguirá os exemplos em Postman. Use Bruno apenas se você se sentir confortável para adaptar a sintaxe dos testes e entregar evidências equivalentes.
+
+Se estiver usando a extensão Postman no VS Code, os nomes e posições podem variar um pouco. Siga o conceito equivalente: request, body, script de pós-resposta e resultados dos testes.
 </details>
 
 <details>

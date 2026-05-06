@@ -1,6 +1,8 @@
 # 03 — Escrevendo testes com a API `pm.*`
 
-A aba **Tests** do Postman executa JavaScript **após** cada resposta. Esse JS tem acesso a um objeto global `pm` que é a porta para todas as validações.
+No Postman atual, os testes são escritos em **Scripts → Post-response**. Esse JavaScript executa **após** cada resposta e tem acesso a um objeto global `pm`, que é a porta para todas as validações.
+
+Em tutoriais antigos, essa área aparece como aba **Tests**. Na interface atual, procure **Scripts** e selecione **Post-response**. Não cole os asserts em **Pre-request**, porque essa área roda antes da chamada e ainda não tem resposta da API.
 
 Pense em `pm.*` como uma versão limitada do JUnit/XUnit que vimos em aula, agora aplicada a APIs.
 
@@ -21,14 +23,14 @@ pm.test("Nome descritivo do teste", function () {
 
 ## Acessando a resposta — `pm.response`
 
-| Propriedade / método | Retorna | Exemplo |
+|Propriedade / método|Retorna|Exemplo|
 |---|---|---|
-| `pm.response.code` | número | `200` |
-| `pm.response.status` | string | `"OK"` |
-| `pm.response.responseTime` | número (ms) | `42` |
-| `pm.response.json()` | objeto/array | `{ id: 1, title: "..." }` |
-| `pm.response.text()` | string | `'{"id":1,...}'` |
-| `pm.response.headers.get(name)` | string | `"application/json"` |
+|`pm.response.code`|número|`200`|
+|`pm.response.status`|string|`"OK"`|
+|`pm.response.responseTime`|número (ms)|`42`|
+|`pm.response.json()`|objeto/array|`{ id: 1, title: "..." }`|
+|`pm.response.text()`|string|`'{"id":1,...}'`|
+|`pm.response.headers.get(name)`|string|`"application/json"`|
 
 ---
 
@@ -98,7 +100,7 @@ pm.environment.set("last_created_id", body.id);
 ### Padrão "criar e reutilizar id"
 
 ```javascript
-// Aba Tests do POST /posts
+// Scripts → Post-response do POST /posts
 pm.test("Status é 201", function () {
   pm.response.to.have.status(201);
 });
@@ -107,7 +109,7 @@ const created = pm.response.json();
 pm.environment.set("created_id", created.id);
 ```
 
-```
+```http
 GET {{base_url}}/posts/{{created_id}}    ← outro request usa a variável
 ```
 

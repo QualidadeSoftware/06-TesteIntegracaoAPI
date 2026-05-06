@@ -20,7 +20,7 @@ A API didática deste repositório foi projetada para responder corretamente nos
 GET {{base_url}}/posts/999999
 ```
 
-**Aba Tests:**
+**Scripts → Post-response:**
 
 ```javascript
 pm.test("Status é 404 Not Found", function () {
@@ -52,7 +52,7 @@ Content-Type: application/json
 isso não é json válido {{{
 ```
 
-No Postman, configure a aba **Body** como `raw` + `JSON`. O header `Content-Type: application/json` é essencial para a API tentar interpretar o corpo como JSON e retornar `400` quando ele estiver malformado.
+No Postman, configure a aba **Body** como `raw` + formato `JSON`. O header `Content-Type: application/json` é essencial para a API tentar interpretar o corpo como JSON e retornar `400` quando ele estiver malformado. O Postman normalmente adiciona esse header automaticamente; se não adicionar, configure manualmente em **Headers**.
 
 ```javascript
 pm.test("Status é 400 Bad Request", function () {
@@ -79,7 +79,7 @@ Para a atividade avaliativa, use o JSON malformado com `Content-Type: applicatio
 DELETE {{base_url}}/posts
 ```
 
-**Aba Tests:**
+**Scripts → Post-response:**
 
 ```javascript
 pm.test("Status é 405 Method Not Allowed", function () {
@@ -135,4 +135,4 @@ O ponto central de um cenário negativo é o **status code de erro correto**. Tu
 
 ---
 
-[← Anterior: Escrevendo tests](03-escrevendo-tests.md) · [→ Próximo: Variáveis](05-variaveis-e-environments.md) · [↑ README](../README.md)
+[← Anterior: Escrevendo testes](03-escrevendo-tests.md) · [→ Próximo: Variáveis](05-variaveis-e-environments.md) · [↑ README](../README.md)

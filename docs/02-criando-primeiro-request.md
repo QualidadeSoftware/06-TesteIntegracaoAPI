@@ -18,8 +18,8 @@ Daqui em diante, vamos chamar essa URL de `BASE`.
 
 A coleção é a "pasta" que agrupa seus requests relacionados.
 
-1. No painel esquerdo, aba **Collections**
-2. Clique em **+** ou **New Collection**
+1. No painel esquerdo, abra **Collections**.
+2. Clique em **+** ou **New Collection**. Se o Postman oferecer templates, escolha uma coleção em branco.
 3. Nomeie como `Atividade-Teste-API`
 4. (Opcional) Adicione uma descrição: "Atividade prática — Qualidade de Software / UNISANTA"
 5. Clique em **Create**
@@ -28,8 +28,8 @@ A coleção é a "pasta" que agrupa seus requests relacionados.
 
 ## 2. Criar o primeiro request
 
-1. Clique nos **três pontinhos (⋯)** ao lado do nome da coleção
-2. Selecione **Add Request**
+1. Clique nos **três pontinhos (⋯)** ao lado do nome da coleção e selecione **Add request**. Você também pode usar o botão **+** no topo e salvar o request dentro da coleção.
+2. Se o request abrir como uma aba temporária, salve-o na coleção antes de continuar.
 3. Nomeie: `01 - GET listar todos`
 4. No painel central, configure:
    - **Método:** `GET`
@@ -54,12 +54,13 @@ Você verá no painel inferior:
 
 ---
 
-## 4. Escrever testes na aba `Tests`
+## 4. Escrever testes em Scripts → Post-response
 
-**Sem testes na aba `Tests`, sua entrega não vale.**
+**Sem testes em Scripts → Post-response, sua entrega não vale.**
 
-1. Com o request aberto, clique na aba **Tests**
-2. Cole o seguinte código:
+1. Com o request aberto, clique na aba **Scripts**.
+2. No painel lateral/interno de Scripts, selecione **Post-response**.
+3. Cole o seguinte código:
 
 ```javascript
 pm.test("Status é 200", function () {
@@ -77,7 +78,7 @@ pm.test("Resposta veio em menos de 2s", function () {
 });
 ```
 
-1. **Ctrl+S** para salvar
+1. Clique em **Save** no topo direito do request ou pressione **Ctrl+S** para salvar.
 
 ---
 
@@ -96,11 +97,11 @@ pm.test("Resposta veio em menos de 2s", function () {
 
 ## 6. Repita para os outros 5 requests positivos
 
-Use o exemplo acima como modelo. Para cada request adicione **pelo menos 2 testes** na aba `Tests`. Para `POST`, `PUT`, `PATCH`, configure a aba **Body** com `raw` + `JSON`.
+Use o exemplo acima como modelo. Para cada request adicione **pelo menos 2 testes** em **Scripts → Post-response**. Para `POST`, `PUT`, `PATCH`, configure a aba **Body** com `raw` + `JSON`.
 
 ### Exemplo de body para `POST /posts`
 
-Aba **Body** → **raw** → **JSON**:
+Aba **Body** → **raw** → dropdown de formato **JSON**:
 
 ```json
 {
@@ -115,6 +116,8 @@ E adicione o header:
 | Key            | Value              |
 | -------------- | ------------------ |
 | `Content-Type` | `application/json` |
+
+O Postman normalmente adiciona esse header automaticamente quando você escolhe **raw** + **JSON**. Se não adicionar, configure manualmente na aba **Headers**. Na interface atual, essa aba pode aparecer como **Headers 8**, **Headers 9** etc.; o número só indica quantos headers existem.
 
 ### Exemplos de body para `PUT` e `PATCH`
 
@@ -146,9 +149,10 @@ Se você já tiver rodado a coleção antes, execute `POST BASE/reset` para recr
 
 Ritual recomendado antes de tirar prints: rode `POST BASE/reset` uma vez, depois execute os requests na ordem numérica.
 
-1. **⋯** da coleção → **Run collection**
-2. Marque todos os requests
-3. Clique em **Run Atividade-Teste-API**
+1. Passe o mouse sobre a coleção no painel esquerdo, clique em **⋯** e escolha **Run collection**.
+2. Na tela do Runner, marque os requests que serão executados.
+3. Confira se a ordem está `00 - Resetar dados`, `01`, `02`, ..., `09`. Se o Runner mostrar pastas, expanda e confirme a sequência.
+4. Clique em **Run** ou **Run Atividade-Teste-API**.
 
 Você verá um relatório com **N tests passed, 0 failed**. **Tire um print desta tela** — ele faz parte dos entregáveis.
 
@@ -172,8 +176,8 @@ Esse erro normalmente significa que a API já está rodando na porta `3000`. Con
 
 ### Os testes não aparecem em "Test Results"
 
-Confirme que você colou o código na aba **Tests** (não em `Pre-request Script`). Os testes só rodam **depois** da resposta chegar.
+Confirme que você colou o código em **Scripts → Post-response**, não em **Pre-request**. Os testes só rodam **depois** da resposta chegar.
 
 ---
 
-[← Anterior: Instalação](01-instalacao-postman.md) · [→ Próximo: Escrevendo Tests com `pm.*`](03-escrevendo-tests.md) · [↑ README](../README.md)
+[← Anterior: Instalação](01-instalacao-postman.md) · [→ Próximo: Escrevendo testes com `pm.*`](03-escrevendo-tests.md) · [↑ README](../README.md)
